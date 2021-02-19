@@ -1,5 +1,7 @@
 # ofxJFA
 
+![image](https://user-images.githubusercontent.com/26333602/108489927-6fbf2b80-72a2-11eb-946b-d081ad984988.png)
+
 A simple Openframeworks addon for doing Jumpflood algorithm on GLSL. It takes in a source texture and outputs a JFA encoded texture. 
 
 It is based on Ryan Kaplan's article, which you can read [here](https://www.rykap.com/graphics/skew/2016/02/25/voronoi-diagrams/). It, in turn, is based on [this paper](https://www.comp.nus.edu.sg/~tants/jfa/i3d06.pdf).
