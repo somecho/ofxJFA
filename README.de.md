@@ -1,0 +1,59 @@
+# OfxJFA - OpenFrameworks Jump Flooding addon
+
+Ein Addon für das
+C++ Framework OpenFrameworks des Jump Flooding-Algorithmus, der mit
+GLSL-Shadern implementiert wurde. Der Jump Flooding-Algorithmus ist eine
+Methode zur Konstruktion von Voronoi-Diagrammen, indem die Entfernung und ID
+des nächstgelegenen *Seeds* für jeden Pixel in einer Textur codiert wird. Dieses
+Add-On folgt der Implementierungsbeschreibung in diesem [Artikel von Ryan
+Kaplan](https://www.rykap.com/graphics/skew/2016/02/25/voronoi-diagrams/).
+
+<div align="center">
+<img src="https://user-images.githubusercontent.com/26333602/108489927-6fbf2b80-72a2-11eb-946b-d081ad984988.png" width="720">
+<p><em>Farbzuordnung nach Jump Flooding</em></p>
+</div>
+
+## Verwendung ofxJFA
+Die Verwendung von ofxJFA ist so einfach wie das Übergeben einer `ofxTexture` an
+die `update()`-Methode einer Instanz der Klasse `ofxJFA`. Die Klasse führt dann 11
+Durchgänge des Jump-Flooding-Algorithmus durch, schreibt jedes Mal das Output
+in eine `RGBA32F`-Textur und gibt sie am Ende zurück.
+
+### Declare and Init
+```cpp
+//ofApp.h
+#include "ofxJFA.h"
+ofxJfa jfa;
+
+//ofApp.cpp 
+//Breite und Höhe der Quelltextur
+jfa.init(1280,720); 
+```
+### Update 
+```cpp
+//ofApp.cpp
+
+//Quelltextur eingeben
+jfa.update(tex); 
+```
+
+## Verwendung des Outputs 
+Das Output dieses Add-ons ist eine JFA-Kodierung, bei der die XY-Koordinaten
+zum nächstgelegenen Seed in den roten und grünen Kanälen der Textur und die
+Entfernung dazu im blauen Kanal aufgezeichnet werden.
+
+Die Textur kann dann in einem anderen Shader für andere Zwecke verwendet werden.
+```cpp
+//ofApp.cpp
+
+// Texture in einen anderen Shader geben
+shader.setUniformTexture("jfa", jfa.getTexture(), 0);
+shader.setUniformTexture("src", tex, 1);
+```
+```glsl
+//shader.frag
+
+//Kodierung abrufen
+vec4 loc = texture(jfa, gl_FragCoord.xy); 
+gl_FragColor = texture(src, loc.xy); 
+```
